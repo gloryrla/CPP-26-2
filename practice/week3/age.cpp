@@ -4,7 +4,7 @@ using namespace std;
 int main() {
     
     int age;
-    cout << "나이를 입력하세요!: ";
+    cout << "나이를 입력해주세요!: ";
     cin >> age;
 
     if (age <= 12)
