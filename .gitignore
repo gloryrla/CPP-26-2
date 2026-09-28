@@ -63,29 +63,3 @@ packages/
 # 단, 소스에 필요한 빌드 스크립트는 허용
 !**/packages/build/
 !**/packages/repositories.config
-
-# ------ Rider/JetBrains(선택) ------
-.idea/
-*.sln.iml
-
-# ------ Test/coverage (필요 시) ------
-[Test[Rr]esult]*/
-*.trx
-*.coverage
-*.coveragexml
-
-# ------ Others (대형/바이너리 산출물) ------
-*.zip
-*.7z
-*.tar
-*.gz
-*.rar
-*.iso
-
-# ------ Unity/Unreal 등 다른 엔진을 쓰면 별도 규칙 추가 ------
-
-# ------ If you version-control only selected .vscode files ------
-# Uncomment these lines if you want to include specific VSCode configs
-#!.vscode/settings.json
-#!.vscode/tasks.json
-#!.vscode/launch.json
