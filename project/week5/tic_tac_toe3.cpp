@@ -77,49 +77,42 @@ int main() {
         
 
 
+
+        bool flag = false; //승자 체크하기
          //빙고 시 승자 출력 후 종료(가로, 세로, 대각선)
-        //가로 검증
-        if (borad[0][0] == borad[0][1] && borad[0][1] == borad[0][2] && borad[0][1] == currentUser){
-            cout << "가로에 모두 돌이 놓였습니다!: " << k % 2 + 1 << "번 유저의(" << currentUser << ")의 승리입니다!";
-            break;
-        }
-        if (borad[1][0] == borad[1][1] && borad[1][1] == borad[1][2] && borad[1][1] == currentUser){
-            cout << "가로에 모두 돌이 놓였습니다!: " << k % 2 + 1 << "번 유저의(" << currentUser << ")의 승리입니다!";
-            break;
-        }
-        if (borad[2][0] == borad[2][1] && borad[2][1] == borad[2][2] && borad[2][1] == currentUser){
-            cout << "가로에 모두 돌이 놓였습니다!: " << k % 2 + 1 << "번 유저의(" << currentUser << ")의 승리입니다!";
-            break;
-        }
-        
-
-
-        //세로 검증    
-        if (borad[0][0] == borad[1][0] && borad[1][0] == borad[2][0] && borad[1][0] == currentUser){
-            cout << "세로에 모두 돌이 놓였습니다!: " << k % 2 + 1 << "번 유저의(" << currentUser << ")의 승리입니다!";
-            break;
-        }
-        if (borad[0][1] == borad[1][1] && borad[1][1] == borad[2][1] && borad[1][1] == currentUser){
-            cout << "세로에 모두 돌이 놓였습니다!: " << k % 2 + 1 << "번 유저의(" << currentUser << ")의 승리입니다!";
-            break;
-        }
-        if (borad[0][2] == borad[1][2] && borad[1][2] == borad[2][2] && borad[1][2] == currentUser){
-            cout << "세로에 모두 돌이 놓였습니다!: " << k % 2 + 1 << "번 유저의(" << currentUser << ")의 승리입니다!";
-            break;
-        }
-    
+        //가로 & 세로  검증
+        for (int i = 0; i < numCell; i++){
+            if (borad[i][0] == borad[i][1] && borad[i][1] == borad[i][2] && borad[i][1] == currentUser){
+                cout << "가로에 모두 돌이 놓였습니다!: " << k % 2 + 1 << "번 유저의(" << currentUser << ")의 승리입니다!";
+                flag = true;
+                break;
+            }
+            if (borad[0][i] == borad[1][i] && borad[1][i] == borad[2][i] && borad[1][i] == currentUser){
+                cout << "세로에 모두 돌이 놓였습니다!: " << k % 2 + 1 << "번 유저의(" << currentUser << ")의 승리입니다!";
+                flag = true;
+                break;
+            }
+        }   
 
 
         //대각선 검증
         if (borad[0][0] == borad[1][1] && borad[1][1] == borad[2][2] && borad[1][1] == currentUser){
             cout << "대각선에 모두 돌이 놓였습니다!: " << k % 2 + 1 << "번 유저의(" << currentUser << ")의 승리입니다!";
+            flag = true;
             break;
         }
         if (borad[0][2] == borad[1][1] && borad[1][1] == borad[2][0] && borad[1][1] == currentUser){
             cout << "대각선에 모두 돌이 놓였습니다!: " << k % 2 + 1 << "번 유저의(" << currentUser << ")의 승리입니다!";
+            flag = true;
             break;
         }
         
+
+        if (flag) {
+            cout << k % 2 + 1 << "번 유저(" << currentUser << ")의 승리입니다!" << endl;
+            cout << "종료합니다" << endl;
+            break;
+        }
         
 
         //모든 칸이 다 찬 경우 종료 -> 유저가 돌을 놓은 횟수가 칸보다 넘게 되면 종료
