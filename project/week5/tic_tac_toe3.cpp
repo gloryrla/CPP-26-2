@@ -20,7 +20,7 @@ int main() {
     char currentUser = 'x'; //현재 유저의 돌을 저장하기 위한 문자 변수
     while (true){
         //1. 누구 차례인지 출력
-        switch (k % 2){
+        switch (k % 3){
         case 0:
             cout << k % 2 + 1 << "번 유저(x)의 차례입니다 -> ";
             currentUser = 'x';
@@ -29,7 +29,12 @@ int main() {
         case 1:
             cout << k % 2 + 1 << "번 유저(o)의 차례입니다 -> ";
             currentUser = 'o';
-            break;        
+            break;   
+            
+        case 2:
+            cout << k % 2 + 1 << "번 유저(^)의 차례입니다 -> ";
+            currentUser = '^'; //세모는 1바이트 넘어서 대체했습니다!
+            break;       
         }        
 
         //2. 좌표 입력 받기
