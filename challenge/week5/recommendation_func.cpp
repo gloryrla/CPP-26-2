@@ -1,6 +1,8 @@
 #include <iostream>
+
 using namespace std;
 
+// 모든 함수에 사용하는 변수 전역 변수로 초기화
 const int NUM_USERS = 3;
 const int NUM_ITEMS = 3;
 int userPreferences[NUM_USERS][NUM_ITEMS];
@@ -20,7 +22,10 @@ int main() {
 
     return 0;
 }
-//사용자와 항목 간의 선호도를 입력 받아 2차원 배열 초기화
+
+
+
+//사용자와 항목 간의 선호도를 입력 받아 2차원 배열 초기화하는 함수
 void initializePreferences(int preferences[NUM_USERS][NUM_ITEMS]) {
     for (int i = 0; i < NUM_USERS; i++) {
         cout << "사용자 " << (i + 1) << "의 선호도를 입력하세요 (";
@@ -31,7 +36,7 @@ void initializePreferences(int preferences[NUM_USERS][NUM_ITEMS]) {
     }
 }
 
-//각 사용자에 대한 추천 항목 찾기
+//각 사용자에 대한 추천 항목 찾는 함수
 void findRecommendedItems(const int preferences[NUM_USERS][NUM_ITEMS]) {
     for (int i = 0; i < NUM_USERS; ++i) {
         int maxPreferenceIndex = 0;
@@ -40,10 +45,10 @@ void findRecommendedItems(const int preferences[NUM_USERS][NUM_ITEMS]) {
                 maxPreferenceIndex = j;
             }
         }
+        
         // 사용자에게 추천하는 항목 출력
         cout << "사용자 " << (i + 1) << "에게 추천하는 항목: ";
         cout << (maxPreferenceIndex + 1) << std:: endl;
-
     }
 }
 
