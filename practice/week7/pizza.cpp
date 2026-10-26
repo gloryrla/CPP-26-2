@@ -23,6 +23,7 @@ int main() {
     pizza2.radius = 200;
     pizza1.color = "yellow";
     cout << "피자의 면적" << pizza2.CalcArea() << "\n";
+    
     return 0;
 
 }
