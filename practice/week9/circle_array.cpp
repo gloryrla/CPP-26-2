@@ -28,7 +28,7 @@ int main(void)
     Circle objArray[10];
 
 
-    
+    //&가 있어야 복사한 객체값을 수정한게 아니라 원본 객체를 참조한다.
     for (Circle& c: objArray) {
         c.x = rand()%500;
         c.y = rand()%300;

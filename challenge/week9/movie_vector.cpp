@@ -43,11 +43,4 @@ int main() {
         p.PrintMovie();
     }
 
-    for (auto p : movies) {
-        p.PrintMovie();
-    }
-
-
-
-
 }
