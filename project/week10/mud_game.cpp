@@ -9,7 +9,13 @@ const int mapY = 5;
 bool checkXY(int user_x, int mapX, int user_y, int mapY);
 void displayMap(int map[][mapX], int user_x, int user_y);
 bool checkGoal(int map[][mapX], int user_x, int user_y);
-void checkState(int map[][mapX], int user_x, int user_y);
+void checkState(int map[][mapX], int user_x, int user_y, int& userHp);
+void printInmap(bool inMap);
+void moveUp(int map[][mapX], int& user_x, int& user_y, int& userHp);
+void moveDown(int map[][mapX], int& user_x, int& user_y, int& userHp);
+void moveLeft(int map[][mapX], int& user_x, int& user_y, int& userHp);
+void moveRight(int map[][mapX], int& user_x, int& user_y, int& userHp);
+bool isValidkUserHp(int& userHp);
 
 
 // 메인  함수
@@ -35,10 +41,9 @@ int main() {
 		// 사용자의 입력을 저장할 변수
 		string user_input = "";
 
-        cout << "현재 Hp: " << userHp << " ";
-        // userHp 0이하시 실패 출력 후 종료
-        if (userHp < 1) {
-            cout << "실패"; 
+
+        //userHp < 1 이하면 isValidkUserHp false 반환
+        if(!isValidkUserHp(userHp)) {
             return 0;
         }
 
@@ -46,65 +51,16 @@ int main() {
 		cin >> user_input;
 
 		if (user_input == "상") {
-			// 위로 한 칸 올라가기
-			user_y -= 1;
-            // user hp 1 감소
-            userHp -= 1;
-			bool inMap = checkXY(user_x, mapX, user_y, mapY);
-			if (inMap == false) {
-				cout << "맵을 벗어났습니다. 다시 돌아갑니다." << endl;
-				user_y += 1;
-			}
-			else {
-				cout << "위로 한 칸 올라갑니다." << endl;
-				displayMap(map, user_x, user_y);
-			}
+            moveUp(map, user_x, user_y, userHp);
 		}
 		else if (user_input == "하") {
-			// TODO: 아래로 한 칸 내려가기
-			user_y += 1;
-            // user hp 1 감소
-            userHp -= 1;
-			bool inMap = checkXY(user_x, mapX, user_y, mapY);
-			if (inMap == false) {
-				cout << "맵을 벗어났습니다. 다시 돌아갑니다." << endl;
-				user_y -= 1;
-			}
-			else {
-				cout << "위로 한 칸 내려갑니다." << endl;
-				displayMap(map, user_x, user_y);
-			}
+            moveDown(map, user_x, user_y, userHp);
 		}
 		else if (user_input == "좌") {
-			// TODO: 왼쪽으로 이동하기
-			user_x -= 1;
-            // user hp 1 감소
-            userHp -= 1;
-			bool inMap = checkXY(user_x, mapX, user_y, mapY);
-
-			if (inMap == false) {
-				cout << "맵을 벗어났습니다. 다시 돌아갑니다." << endl;
-				user_x += 1;
-			}
-			else {
-				cout << "왼쪽으로 이동합니다." << endl;
-				displayMap(map, user_x, user_y);
-			}
+            moveLeft(map, user_x, user_y, userHp);
 		}
 		else if (user_input == "우") {
-			// TODO: 오른쪽으로 이동하기
-			user_x += 1;
-            // user hp 1 감소
-            userHp -= 1;
-			bool inMap = checkXY(user_x, mapX, user_y, mapY);
-			if (inMap == false) {
-				cout << "맵을 벗어났습니다. 다시 돌아갑니다." << endl;
-				user_x -= 1;
-			}
-			else {
-				cout << "오른쪽으로 이동합니다." << endl;
-				displayMap(map, user_x, user_y);
-			}
+            moveRight(map, user_x, user_y, userHp);
 		}
 		else if (user_input == "지도") {
 			// TODO: 지도 보여주기 함수 호출
@@ -125,15 +81,8 @@ int main() {
 		}
 
         // 도착지에 아이템.적.포션 확인 후 출력 및 유저 체력 변경
-        checkState(map, user_x, user_y);
+        checkState(map, user_x, user_y, userHp);
 
-
-        // 도착지에 적(2) 포션(3) 있으면 체력 변경
-        if (map[user_y][user_x] == 2){
-            userHp -= 2;
-        } else if (map[user_y][user_x] == 3) {
-            userHp += 2;
-        }
 	}
 	return 0;
 }
@@ -192,8 +141,9 @@ bool checkGoal(int map[][mapX], int user_x, int user_y) {
 	return false;
 }
 
-void checkState(int map[][mapX], int user_x, int user_y) {
-    // 0은 빈 공간, 1은 아이템, 2는 적, 3은 포션, 4는 목적지
+// 도착지에 아이템.적.포션 확인 후 출력 및 유저 체력 변경
+void checkState(int map[][mapX], int user_x, int user_y, int& userHp) {
+    // 0은 빈 공간, 1은 아이템, 2는 적, 3은 포션
     switch (map[user_y][user_x]){
     case 0:
         //빈공간
@@ -203,11 +153,101 @@ void checkState(int map[][mapX], int user_x, int user_y) {
         break;
     case 2:
         cout << "적이 있습니다. " << endl;
+        userHp -= 2;
         cout << "HP가 2 줄어듭니다. " << endl;
         break;
     case 3:
         cout << "포션이 있습니다. " << endl;
+        userHp += 2;
         cout << "HP가 2 증가합니다. " << endl;
         break;   
     }
+}
+
+//위로 움직이는 함수
+void moveUp(int map[][mapX], int& user_x, int& user_y, int& userHp) {
+     // 위로 한 칸 올라가기
+        user_y -= 1;
+
+
+        if (!checkXY(user_x, mapX, user_y, mapY)) {
+            cout << "맵을 벗어났습니다. 다시 돌아갑니다." << endl;
+        }
+        else {
+            cout << "위로 한 칸 올라갑니다." << endl;
+
+            displayMap(map, user_x, user_y);
+
+            // user hp 1 감소
+            userHp -= 1;
+        }
+}
+
+//아래로 움직이는 함수
+void moveDown(int map[][mapX], int& user_x, int& user_y, int& userHp) {
+    // TODO: 아래로 한 칸 내려가기
+    user_y += 1;
+
+    if (!checkXY(user_x, mapX, user_y, mapY)) {
+        cout << "맵을 벗어났습니다. 다시 돌아갑니다." << endl;
+        user_y -= 1;
+    }
+    else {
+        cout << "위로 한 칸 내려갑니다." << endl;
+        displayMap(map, user_x, user_y);
+        
+        // user hp 1 감소
+        userHp -= 1;
+    }
+}
+
+//왼쪽로 움직이는 함수
+void moveLeft(int map[][mapX], int& user_x, int& user_y, int& userHp) {
+    // TODO: 왼쪽으로 이동하기
+    user_x -= 1;
+
+
+    if (!checkXY(user_x, mapX, user_y, mapY)) {
+        cout << "맵을 벗어났습니다. 다시 돌아갑니다." << endl;
+        user_x += 1;
+    }
+    else {
+        cout << "왼쪽으로 이동합니다." << endl;
+        displayMap(map, user_x, user_y);
+
+        // user hp 1 감소
+        userHp -= 1;
+    }
+}
+
+
+//오른쪽로 움직이는 함수
+void moveRight(int map[][mapX], int& user_x, int& user_y, int& userHp) {
+    // TODO: 오른쪽으로 이동하기
+    user_x += 1;
+
+    if (!checkXY(user_x, mapX, user_y, mapY)) {
+        cout << "맵을 벗어났습니다. 다시 돌아갑니다." << endl;
+        user_x -= 1;
+    }
+    else {
+        cout << "오른쪽으로 이동합니다." << endl;
+        displayMap(map, user_x, user_y);
+
+        // user hp 1 감소
+        userHp -= 1;
+    }
+}
+
+// userHp 0이하시 실패 출력 후 종료하는 함수
+bool isValidkUserHp(int& userHp) {
+    cout << "현재 Hp: " << userHp << " ";
+    
+    // Hp 1이하면 false 반환
+    if (userHp < 1) {
+        cout << "실패"; 
+        return false;
+    }
+
+    return true;
 }
