@@ -24,7 +24,7 @@ public:
 };
 
 Complex Add(Complex *c1, Complex *c2) {
-        return Complex(c1->real + c1->real, c2->imag + c2->imag);
+        return Complex(c1->real + c1->real, c1->imag + c2->imag);
     }
 
 int main() {
