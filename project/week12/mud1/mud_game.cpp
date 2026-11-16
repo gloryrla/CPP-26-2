@@ -42,10 +42,6 @@ int main() {
 		// 사용자의 입력을 저장할 변수
 		string user_input = "";
 
-
-    
-
-
         //user 체력이 1미만이면 실패 출력
         CheckUser(user);
 
