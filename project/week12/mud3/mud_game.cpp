@@ -36,7 +36,7 @@ int main() {
 	int user_y = 0; // 세로 번호
 
     //magician, warrior 담을 User 객체 생성
-    User user;
+    User* user;
 
     //magicion, warrior 구분하기 위한 cnt
     int cnt = 0;
@@ -51,10 +51,10 @@ int main() {
 
 
         if (cnt % 2 == 0) {
-            user = magician;
+            user = &magician;
             cout << "magicaion 차례입니다" << endl;
         } else {
-            user = warrior;
+            user = &warrior;
             cout << "warrior 차례입니다" << endl;
         }
         // 다음 차례를 위한 cnt 값 증가 
@@ -64,22 +64,22 @@ int main() {
 		string user_input = "";
 
         //user 체력이 1미만이면 실패 출력
-        CheckUser(user);
+        CheckUser(*user);
 
 		cout << "명령어를 입력하세요 (상,하,좌,우,지도,정보,종료): ";
 		cin >> user_input;
 
 		if (user_input == "상") {
-            moveUp(map, user_x, user_y, user);
+            moveUp(map, user_x, user_y, *user);
 		}
 		else if (user_input == "하") {
-            moveDown(map, user_x, user_y, user);
+            moveDown(map, user_x, user_y, *user);
 		}
 		else if (user_input == "좌") {
-            moveLeft(map, user_x, user_y, user);
+            moveLeft(map, user_x, user_y, *user);
 		}
 		else if (user_input == "우") {
-            moveRight(map, user_x, user_y, user);
+            moveRight(map, user_x, user_y, *user);
 		}
 		else if (user_input == "지도") {
 			// TODO: 지도 보여주기 함수 호출
@@ -88,7 +88,7 @@ int main() {
         //정보 명령어 추가
         else if(user_input == "정보") {
             // 정보 입력시 cout << user << endl; 현재 사용자 정보 보여주게 개선
-            cout << user << endl;
+            cout << *user << endl;
         }
 		else if (user_input == "종료") {
 			cout << "종료합니다.";
@@ -105,7 +105,7 @@ int main() {
 		}
 
         // 도착지에 아이템.적.포션 확인 후 출력 및 유저 체력 변경
-        checkState(map, user_x, user_y, user);
+        checkState(map, user_x, user_y, *user);
 
 	}
 	return 0;
