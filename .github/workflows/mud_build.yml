@@ -4,7 +4,7 @@ on:
   push:
     paths:
       - 'practice/week13/actions_test/**'
-      - '.github/workflows/build.yml'
+      - '.github/workflows/mud_build.yml'
   workflow_dispatch:
 
 permissions:
@@ -26,7 +26,7 @@ jobs:
         working-directory: practice/week13/actions_test
         run: |
           set -e
-          g++ -std=c++17 -Wall -Wextra main.cpp user.cpp -o game && ./game
+          g++ -std=c++17 -Wall -Wextra main.cpp user.cpp -o game
           ./game.exe
 
       - uses: actions/upload-artifact@v7

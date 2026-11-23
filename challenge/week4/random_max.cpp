@@ -1,5 +1,5 @@
 #include <iostream>
-#include <stdio.h>
+#include <cstdlib>
 using namespace std;
 
 int main() {
@@ -8,7 +8,7 @@ int main() {
 
     for (int i = 0; i < numCell; i++) {
         for (int j = 0; j < numCell; j++){
-            numList[i][j] = random() % 1000;
+            numList[i][j] = rand() % 1000;
         }
     }
 

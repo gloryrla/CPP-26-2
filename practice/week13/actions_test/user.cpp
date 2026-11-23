@@ -1,7 +1,6 @@
-#include <string>
-using namespace std;
-struct User {
-string name;
-int hp;
-};
-void printStatus(const User& user);
+#include <iostream>
+#include "user.h"
+
+void printStatus(const User& user) {
+    cout << user.name << " HP: " << user.hp << endl;
+}

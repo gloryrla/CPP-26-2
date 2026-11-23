@@ -1,22 +1,147 @@
 #include <iostream>
 #include <string>
-#include "user.h"
+#include <vector>
 using namespace std;
 
 const int mapX = 5;
 const int mapY = 5;
 
+
+class User
+{
+public:
+    int hp = 20;
+    int itemCnt = 0; // 아이템 먹은 횟수를 저장하는 변수
+
+public:
+    virtual void DecreasedHP() = 0;
+    virtual void IncreasedHP() = 0;
+    virtual void IncreasedItemCnt() = 0;
+    virtual int GetHp() const = 0;
+    virtual int GetItemCnt() const = 0;
+    virtual bool CheckUser() const = 0;
+    virtual void doAttack() = 0;
+    virtual void printItemCnt() const{};
+};
+
+ostream &operator<<(ostream &os, const User &user) {
+    os << "현재 HP는 " << user.GetHp() << "이고, 먹은 아이템은 총 " << user.GetItemCnt() << "개";
+    return os;  
+}
+
+class Magician : public User
+{
+public:
+    void doAttack()
+    {
+        cout << "배기 사용" << endl;
+    }
+
+    void DecreasedHP()
+    {
+        hp -= 1;
+    }
+    void IncreasedHP()
+    {
+        hp += 1;
+    }
+
+    // 아이템 cnt 1 증가 하는 메서드
+    void IncreasedItemCnt()
+    {
+        itemCnt += 1;
+    }
+
+    int GetHp() const
+    {
+        return hp;
+    }
+
+    int GetItemCnt() const
+    {
+        return itemCnt;
+    }
+
+    bool CheckUser() const
+    {
+        if (hp < 1)
+        {
+            return false;
+        }
+
+        return true;
+    }
+
+    void printItemCnt() {
+        cout << "아이템 먹은 횟수: " << itemCnt;
+    }
+
+};
+
+class Warrior : public User
+{
+public:
+    void doAttack()
+    {
+        cout << "배기 사용" << endl;
+    }
+
+    void DecreasedHP()
+    {
+        hp -= 1;
+    }
+
+    void IncreasedHP()
+    {
+        hp += 1;
+    }
+
+    // 아이템 cnt 1 증가 하는 메서드
+    void IncreasedItemCnt()
+    {
+        itemCnt += 1;
+    }
+
+    int GetHp() const
+    {
+        return hp;
+    }
+
+    int GetItemCnt() const
+    {
+        return itemCnt;
+    }
+
+    bool CheckUser() const
+    {
+        if (hp < 1)
+        {
+            return false;
+        }
+
+        return true;
+    }
+
+    void printItemCnt() {
+        cout << "아이템 먹은 횟수: " << itemCnt;
+    }
+};
+
 // 사용자 정의 함수
 bool checkXY(int user_x, int mapX, int user_y, int mapY);
 void displayMap(vector<vector<int>> map, int user_x, int user_y);
 bool checkGoal(vector<vector<int>> map, int user_x, int user_y);
-void checkState(vector<vector<int>> map, int user_x, int user_y, User& user);
+void checkState(vector<vector<int>> map, int user_x, int user_y, User* user);
 void printInmap(bool inMap);
-void moveUp(vector<vector<int>> map, int& user_x, int& user_y, User& user);
-void moveDown(vector<vector<int>> map, int& user_x, int& user_y, User& user);
-void moveLeft(vector<vector<int>> map, int& user_x, int& user_y, User& user);
-void moveRight(vector<vector<int>> map, int& user_x, int& user_y, User& user);
-bool CheckUser(User& user);
+void moveUp(vector<vector<int>> map, int& user_x, int& user_y, User* user);
+void moveDown(vector<vector<int>> map, int& user_x, int& user_y, User* user);
+void moveLeft(vector<vector<int>> map, int& user_x, int& user_y, User* user);
+void moveRight(vector<vector<int>> map, int& user_x, int& user_y, User* user);
+bool CheckUser(User* user);
+
+
+
+
 
 
 // 메인  함수
@@ -35,51 +160,49 @@ int main() {
 	int user_x = 0; // 가로 번호
 	int user_y = 0; // 세로 번호
 
+    // 사용자의 입력을 저장할 변수
+    string user_input = "";
+
     //magician, warrior 담을 User 객체 생성
     User* user;
 
-    //magicion, warrior 구분하기 위한 cnt
-    int cnt = 0;
+    cout << "직업을 고르세요: 1. Magician, 2. Warrior: ";
+    cin >> user_input;
 
-    //magician, warrior 유저객체 생성
-    Magician magician;
-    Warrior warrior;
+
+
+    if (user_input == "1") {
+        user = new Magician();
+        cout << "magicaion 차례입니다" << endl;
+    } else if (user_input == "2") {
+        user = new Warrior();
+        cout << "warrior 차례입니다" << endl;
+    }
 
 
 	// 게임 시작 
 	while (1) { // 사용자에게 계속 입력받기 위해 무한 루프
-
-
-        if (cnt % 2 == 0) {
-            user = &magician;
-            cout << "magicaion 차례입니다" << endl;
-        } else {
-            user = &warrior;
-            cout << "warrior 차례입니다" << endl;
-        }
-        // 다음 차례를 위한 cnt 값 증가 
-        cnt++; 
-
-		// 사용자의 입력을 저장할 변수
+        
+        // 사용자의 입력을 저장할 변수
 		string user_input = "";
 
         //user 체력이 1미만이면 실패 출력
-        CheckUser(*user);
+        CheckUser(user);
 
 		cout << "명령어를 입력하세요 (상,하,좌,우,지도,정보,종료): ";
 		cin >> user_input;
 
 		if (user_input == "상") {
-            moveUp(map, user_x, user_y, *user);
+            moveUp(map, user_x, user_y, user);
 		}
 		else if (user_input == "하") {
-            moveDown(map, user_x, user_y, *user);
+            moveDown(map, user_x, user_y, user);
 		}
 		else if (user_input == "좌") {
-            moveLeft(map, user_x, user_y, *user);
+            moveLeft(map, user_x, user_y, user);
 		}
 		else if (user_input == "우") {
-            moveRight(map, user_x, user_y, *user);
+            moveRight(map, user_x, user_y, user);
 		}
 		else if (user_input == "지도") {
 			// TODO: 지도 보여주기 함수 호출
@@ -105,7 +228,7 @@ int main() {
 		}
 
         // 도착지에 아이템.적.포션 확인 후 출력 및 유저 체력 변경
-        checkState(map, user_x, user_y, *user);
+        checkState(map, user_x, user_y, user);
 
 	}
 	return 0;
@@ -166,7 +289,7 @@ bool checkGoal(vector<vector<int>> map, int user_x, int user_y) {
 }
 
 // 도착지에 아이템.적.포션 확인 후 출력 및 유저 체력 변경
-void checkState(vector<vector<int>> map, int user_x, int user_y, User& user) {
+void checkState(vector<vector<int>> map, int user_x, int user_y, User* user) {
     // 0은 빈 공간, 1은 아이템, 2는 적, 3은 포션
     switch (map[user_y][user_x]){
     case 0:
@@ -175,29 +298,29 @@ void checkState(vector<vector<int>> map, int user_x, int user_y, User& user) {
     case 1: 
         cout << "아이템이 있습니다. " << endl;
         //아이템에 도달시 user 객체에 아이템 cnt 1증가
-        user.IncreasedItemCnt();
+        user->IncreasedItemCnt();
         break;
     case 2:
         cout << "적이 있습니다. " << endl;
         //적 만나면 공력
-        user.doAttack();
+        user->doAttack();
         //hp 감소되는 부분 객체의 DecreaseHP 맴버함수 호출로 진행
-        user.DecreasedHP();
-        user.DecreasedHP();
+        user->DecreasedHP();
+        user->DecreasedHP();
         cout << "HP가 2 줄어듭니다. " << endl;
         break;
     case 3:
         cout << "포션이 있습니다. " << endl;
         //hp 증가되는 부분 객체의 IncreaseHP 맴버함수 호출로 진행
-        user.IncreasedHP();
-        user.IncreasedHP();
+        user->IncreasedHP();
+        user->IncreasedHP();
         cout << "HP가 2 증가합니다. " << endl;
         break;   
     }
 }
 
 //위로 움직이는 함수
-void moveUp(vector<vector<int>> map, int& user_x, int& user_y, User& user) {
+void moveUp(vector<vector<int>> map, int& user_x, int& user_y, User* user) {
      // 위로 한 칸 올라가기
         user_y -= 1;
 
@@ -211,12 +334,12 @@ void moveUp(vector<vector<int>> map, int& user_x, int& user_y, User& user) {
             displayMap(map, user_x, user_y);
 
             // user hp 1 감소
-            user.DecreasedHP();
+            user->DecreasedHP();
         }
 }
 
 //아래로 움직이는 함수
-void moveDown(vector<vector<int>> map, int& user_x, int& user_y, User& user) {
+void moveDown(vector<vector<int>> map, int& user_x, int& user_y, User* user) {
     // TODO: 아래로 한 칸 내려가기
     user_y += 1;
 
@@ -229,12 +352,12 @@ void moveDown(vector<vector<int>> map, int& user_x, int& user_y, User& user) {
         displayMap(map, user_x, user_y);
         
         // user hp 1 감소
-        user.DecreasedHP();
+        user->DecreasedHP();
     }
 }
 
 //왼쪽로 움직이는 함수
-void moveLeft(vector<vector<int>> map, int& user_x, int& user_y, User& user) {
+void moveLeft(vector<vector<int>> map, int& user_x, int& user_y, User* user) {
     // TODO: 왼쪽으로 이동하기
     user_x -= 1;
 
@@ -248,13 +371,13 @@ void moveLeft(vector<vector<int>> map, int& user_x, int& user_y, User& user) {
         displayMap(map, user_x, user_y);
 
         // user hp 1 감소
-        user.DecreasedHP();
+        user->DecreasedHP();
     }
 }
 
 
 //오른쪽로 움직이는 함수
-void moveRight(vector<vector<int>> map, int& user_x, int& user_y, User& user) {
+void moveRight(vector<vector<int>> map, int& user_x, int& user_y, User* user) {
     // TODO: 오른쪽으로 이동하기
     user_x += 1;
 
@@ -267,18 +390,20 @@ void moveRight(vector<vector<int>> map, int& user_x, int& user_y, User& user) {
         displayMap(map, user_x, user_y);
 
         // user hp 1 감소
-        user.DecreasedHP();
+        user->DecreasedHP();
     }
 }
 
 // User 객체를 넣으면 hp가 0인지 체크하고 0이라면 false 반환, 그렇지 않다면 true 반환
-bool CheckUser(User& user) {
-    cout << "현재 Hp: " << user.GetHp() << " ";
+bool CheckUser(User* user) {
+    cout << "현재 Hp: " << user->GetHp() << " ";
 
-    if (user.GetHp() < 1) {
+    if (user->GetHp() < 1) {
         cout << "실패" << endl;
         return false;
     }
 
     return true;
 }
+
+
