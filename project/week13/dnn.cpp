@@ -145,7 +145,7 @@ public:
         for (int i = 0; i < input.size(); i++){
             //양수는 1.0으로
             if (input[i] >= 0) {
-                output.push_back(input[1.0]);
+                output.push_back(1.0);
             } else { //음수는 0으로 
                 output.push_back(0);
             }
